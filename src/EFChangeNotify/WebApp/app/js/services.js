@@ -3,5 +3,5 @@
         "/api/artists/:Id",
         { Id: "@Id" },
         { "update": { method: "PUT" } }
-   );
+    );
 });

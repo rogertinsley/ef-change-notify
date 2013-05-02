@@ -20,9 +20,13 @@ namespace WebApp.Controllers
             Notifier.Changed += notifier_Changed;
         }
 
-        public IEnumerable<Artist> Get()
+        public ArtistsController()
         {
             _db = new ChinookContext();
+        }
+
+        public IEnumerable<Artist> Get()
+        {
             var artists = from a in _db.Artists
                           select a;
 
@@ -30,13 +34,13 @@ namespace WebApp.Controllers
         }
 
         private static void notifier_Changed(object sender, EntityChangeEventArgs<Artist> e)
-        {            
+        {
             var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             context.Clients.All.refresh();
         }
 
         protected override void Dispose(bool disposing)
-        {            
+        {
             if (_db != null)
                 _db.Dispose();
 
