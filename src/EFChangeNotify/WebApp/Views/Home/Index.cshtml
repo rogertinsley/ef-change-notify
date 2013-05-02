@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+ 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Artists Status</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery.signalR-1.0.0.min.js"></script>
+    <script src="~/signalr/hubs" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            var artists = $.connection.notificationHub;
+
+            artists.client.refresh = function () {
+                getData();
+            };
+
+            $.connection.hub.start();
+            getData();
+        });
+
+        function getData() {
+            var $tbl = $('#tblArtistInfo');
+
+            $.ajax({
+                url: '../api/artists',
+                type: 'GET',
+                datatype: 'json',
+                success: function (data) {
+                    if (data.length > 0) {
+                        $tbl.empty();
+                        $tbl.append(' <tr><th>ID</th><th>Name</th></tr>');
+                        var rows = [];
+                        for (var i = 0; i < data.length; i++) {
+                            rows.push(' <tr><td>' + data[i].ArtistId + '</td><td>' + data[i].Name + '</td></tr>');
+                        }
+                        $tbl.append(rows.join(''));
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+    <body>
+        <h2>My Favorite Music Artists</h2>
+        <div class="container-fluid">
+            <table id="tblArtistInfo" class="table table-hover">
+            </table>
+        </div>
+    </body>
+</html>

@@ -85,13 +85,6 @@ namespace EFChangeNotify
             }
         }
 
-        private string GetSql()
-        {
-            var q = GetCurrent();
-
-            return q.ToTraceString();
-        }
-
         private SqlCommand GetCommand()
         {
             var q = GetCurrent();
