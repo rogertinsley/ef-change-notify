@@ -10,20 +10,20 @@ namespace WebApp.Controllers
 {
     public class ArtistsController : ApiController
     {
-        private ChinookContext db;
-        private static EntityChangeNotifier<Artist, ChinookContext> notifier;
+        private ChinookContext _db;
+        private static readonly EntityChangeNotifier<Artist, ChinookContext> Notifier;
 
         static ArtistsController()
         {
-            notifier = new EntityChangeNotifier<Artist, ChinookContext>(a => a.ArtistId > 0);
-            notifier.Error += (sender, e) => Debug.WriteLine("[{0}, {1}, {2}]:\n{3}", e.Reason.Info, e.Reason.Source, e.Reason.Type, e.Sql);
-            notifier.Changed += notifier_Changed;
+            Notifier = new EntityChangeNotifier<Artist, ChinookContext>(a => a.ArtistId > 0);
+            Notifier.Error += (sender, e) => Debug.WriteLine("[{0}, {1}, {2}]:\n{3}", e.Reason.Info, e.Reason.Source, e.Reason.Type, e.Sql);
+            Notifier.Changed += notifier_Changed;
         }
 
         public IEnumerable<Artist> Get()
         {
-            db = new ChinookContext();
-            var artists = from a in db.Artists
+            _db = new ChinookContext();
+            var artists = from a in _db.Artists
                           select a;
 
             return artists;
@@ -37,8 +37,8 @@ namespace WebApp.Controllers
 
         protected override void Dispose(bool disposing)
         {            
-            if (db != null)
-                db.Dispose();
+            if (_db != null)
+                _db.Dispose();
 
             base.Dispose(disposing);
         }
