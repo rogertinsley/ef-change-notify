@@ -36,11 +36,11 @@ namespace WebApp.Controllers
         }
 
         protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
+        {            
             if (db != null)
                 db.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }
